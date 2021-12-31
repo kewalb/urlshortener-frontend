@@ -21,7 +21,13 @@ const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  const handleOpenNavMenu = (event) => {
+  const handleOpenNavMenu = (event, page) => {
+    if(page == "Register"){
+        history.push("/register")
+    }
+    if(page == 'Login'){
+        history.push('/login')
+    }
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event) => {
@@ -29,13 +35,13 @@ const Navbar = () => {
   };
 
   const handleCloseNavMenu = (page) => {
-    console.log(page);
     if(page == "Register"){
         history.push("/register")
     }
     if(page == 'Login'){
         history.push('/login')
     }
+    
     setAnchorElNav(null);
   };
 
@@ -104,7 +110,7 @@ const Navbar = () => {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleCloseNavMenu(page)}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}

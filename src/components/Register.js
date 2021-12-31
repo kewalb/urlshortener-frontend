@@ -2,26 +2,53 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
-
 import Alert from "@mui/material/Alert";
-
 import Snackbar from "@mui/material/Snackbar";
 
-function Login() {
+function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
-
-
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
 
-    setOpen(false);
+    setOpen(!open);
+  };
+
+  const signUp = () => {
+      console.log("hi")
+    const data = {
+      name,
+      email,
+      password,
+    };
+    fetch("http://localhost:9000/user/signup", {
+      method: "post",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+          console.log(data)
+          if(data.message){
+              setMessage(data.message)
+              setOpen(true)
+          }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
   };
 
   const handleEmailChange = (e) => {
@@ -32,64 +59,28 @@ function Login() {
     setPassword(e.target.value);
   };
 
-  const login = () => {
-    if (
-      !/^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-        email
-      )
-    ) {
-      setMessage("Invalid Email");
-      setOpen(true);
-      return;
-    }
-    fetch("http://localhost:9000/user/login", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        password,
-        email,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        if (data.message) {
-          //   M.toast({ html: data.message, classes: "#c62828 red darken-3" });
-          setMessage(data.message);
-          setOpen(true);
-        } else {
-          localStorage.setItem("jwt", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
-          //   M.toast({
-          //     html: "Login Successful",
-          //     classes: "#43a047 green darken-1",
-          //   });
-          setMessage("Login Successful");
-          //   history.push("/");
-          setOpen(true);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   return (
     <Box
       component="form"
       sx={{
-        "& .MuiTextField-root": { m: 2, width: "50ch" },
+        "& .MuiTextField-root": { m: 2, width: "65ch" },
       }}
       noValidate
       autoComplete="off"
       style={{ textAlign: "center" }}
     >
       <Typography variant="h4" style={{ textAlign: "center", margin: 25 }}>
-        Login
+        Please fill out the sign up form...
       </Typography>
-
+      <div>
+        <TextField
+          required
+          id="name-required"
+          label="Name"
+          type="text"
+          onChange={handleNameChange}
+        />
+      </div>
       <div>
         <TextField
           onChange={handleEmailChange}
@@ -114,32 +105,13 @@ function Login() {
           variant="outlined"
           color="success"
           style={{ textAlign: "center", display: "block", margin: "auto" }}
-          onClick={login}
+          onClick={signUp}
         >
-          Login
+          Sign Up
         </Button>
       </div>
-      <div style={{ marginTop: 20 }}>
-        <Link
-          style={{ textDecoration: "none", color: "inherit" }}
-          to="/reset-password"
-        >
-          Forget Password?
-        </Link>
-      </div>
-      <div style={{ marginTop: 20 }}>
-        <Typography>
-          Don't have an account yet?{" "}
-          <Link
-            style={{ textDecoration: "none", color: "blue" }}
-            to="/reset-password"
-          >
-            Sign Up
-          </Link>
-        </Typography>
-      </div>
       {message ? (
-        message === "Login Successful" ? (
+        message === "User created" ? (
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
             <Alert
               onClose={handleClose}
@@ -167,4 +139,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
