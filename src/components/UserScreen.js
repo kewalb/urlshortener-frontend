@@ -27,7 +27,7 @@ function UserScreen() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:9000/urls", {
+    fetch("https://urlshortener-backend1.herokuapp.com/urls", {
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -48,7 +48,7 @@ function UserScreen() {
   };
 
   const shorten = () => {
-    fetch("http://localhost:9000/short", {
+    fetch("https://urlshortener-backend1.herokuapp.com/short", {
       method: "post",
       headers: {
         "Content-Type": "application/json",

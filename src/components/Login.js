@@ -42,7 +42,7 @@ function Login() {
       setOpen(true);
       return;
     }
-    fetch("http://localhost:9000/user/login", {
+    fetch("https://urlshortener-backend1.herokuapp.com/user/login", {
       method: "post",
       headers: {
         "Content-Type": "application/json",

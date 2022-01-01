@@ -27,7 +27,7 @@ function Register() {
       email,
       password,
     };
-    fetch("http://localhost:9000/user/signup", {
+    fetch("https://urlshortener-backend1.herokuapp.com/user/signup", {
       method: "post",
       body: JSON.stringify(data),
       headers: {
