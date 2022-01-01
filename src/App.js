@@ -6,11 +6,23 @@ import Register from "./components/Register";
 import ResetPassword from "./components/ResetPassword";
 import ResetPasswordForm from "./components/ResetPasswordForm";
 import UserScreen from "./components/UserScreen";
+import LogininNavbar from "./components/LogininNavbar"
+import { useEffect, useState } from "react";
 
 function App() {
+  const [user, setUser] = useState();
+  const [jwt, setJwt] = useState()
+
+  useEffect(() => {
+      setUser(localStorage.getItem('user'))
+      setJwt(localStorage.getItem('jwt')
+      )
+  }, [])
+  
+
   return (
     <BrowserRouter>
-      <Navbar />
+      { !(user && jwt) ? <Navbar /> : <LogininNavbar />}
       <Switch>
       <Route path="/register">
         <Register />
@@ -24,7 +36,7 @@ function App() {
       <Route path="/reset-password-form/:token">
         <ResetPasswordForm />
       </Route>
-      <Route path="/user-dashboard">
+      <Route path="/user-dashboard/:user">
         <UserScreen />
       </Route>
       </Switch>

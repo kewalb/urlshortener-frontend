@@ -5,12 +5,14 @@ import { Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
+import { useHistory } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
+  const history = useHistory()
 
 
 
@@ -67,6 +69,7 @@ function Login() {
           setMessage("Login Successful");
           //   history.push("/");
           setOpen(true);
+          setTimeout(() => history.push(`user-dashboard/${data.name}`), 2000);
         }
       })
       .catch((error) => {

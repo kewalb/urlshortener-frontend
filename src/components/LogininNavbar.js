@@ -7,38 +7,58 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from "react-router-dom";
 
-const pages = ["Register", "Login"];
+const pages = ["Dashboard", "Logout"];
+const settings = ["Dashboard", "Logout"];
 
-const Navbar = () => {
-  const history = useHistory();
+const LogininNavbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [user, setUser] = React.useState("")
+  const history = useHistory()
+  console.log(user)
+
+  React.useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('user')))
+  }, [])
 
   const handleOpenNavMenu = (event, page) => {
-    if (page === "Register") {
-      history.push("/register");
-    }
-    if (page === "Login") {
-      history.push("/login");
-    }
+      if(page === "Logout"){
+          handleLogOut()
+      }
     setAnchorElNav(event.currentTarget);
   };
- 
+  const handleOpenUserMenu = (event, page) => {
+    if(page === "Logout"){
+        handleLogOut()
+    }
+    setAnchorElUser(event.currentTarget);
+  };
 
   const handleCloseNavMenu = (page) => {
-    if (page === "Register") {
-      history.push("/register");
+    if(page === "Logout"){
+        handleLogOut()
     }
-    if (page === "Login") {
-      history.push("/login");
-    }
-
     setAnchorElNav(null);
   };
 
+  const handleCloseUserMenu = (page) => {
+    if(page === "Logout"){
+        handleLogOut()
+    }
+    setAnchorElUser(null);
+  };
+
+  const handleLogOut = () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem('jetToken');
+        history.push("/login")
+  }
 
   return (
     <AppBar position="static">
@@ -108,9 +128,39 @@ const Navbar = () => {
               </Button>
             ))}
           </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt={user} />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map((setting) => (
+                <MenuItem key={setting} onClick={() => handleCloseNavMenu(setting)}>
+                  <Typography textAlign="center">{setting}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>
   );
 };
-export default Navbar;
+export default LogininNavbar;
