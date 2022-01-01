@@ -3,9 +3,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-
 import Alert from "@mui/material/Alert";
-
 import Snackbar from "@mui/material/Snackbar";
 
 function Login() {
@@ -60,8 +58,8 @@ function Login() {
           setMessage(data.message);
           setOpen(true);
         } else {
-          localStorage.setItem("jwt", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
+          localStorage.setItem("jwt", data.jwtToken);
+          localStorage.setItem("user", JSON.stringify(data.name));
           //   M.toast({
           //     html: "Login Successful",
           //     classes: "#43a047 green darken-1",
